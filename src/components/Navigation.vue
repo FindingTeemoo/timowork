@@ -12,7 +12,14 @@
     </div>
     <div class="nav-links" :class="{ 'active': menuOpen }">
       <router-link to="/" @click="closeMenu" exact-active-class="active">Home</router-link>
-      <router-link to="/gallery" @click="closeMenu" active-class="active">Work</router-link>
+      <div class="nav-dropdown" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
+        <span class="nav-link-text">Digital Models</span>
+        <div class="dropdown-menu" :class="{ 'show': showDropdown }">
+          <router-link to="/digital-models/key-project" @click="closeMenu" active-class="active">KeyZ</router-link>
+          <router-link to="/digital-models/project-2" @click="closeMenu" active-class="active">TufcaT</router-link>
+        </div>
+      </div>
+      <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
       <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
     </div>
   </nav>
@@ -23,6 +30,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 const scrolled = ref(false);
 const menuOpen = ref(false);
+const showDropdown = ref(false);
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 50;
@@ -120,7 +128,7 @@ onUnmounted(() => {
 
 .nav-links {
   display: flex;
-  gap: 5rem;
+  gap: 3rem;
   align-items: center;
   margin-right: 2rem;
 }
@@ -149,7 +157,7 @@ onUnmounted(() => {
 }
 
 .nav-links a:hover {
-  color: var(--accent-color);
+  color: var(--text-color);
 }
 
 .nav-links a:hover::after {
@@ -157,11 +165,81 @@ onUnmounted(() => {
 }
 
 .nav-links a.active {
-  color: var(--accent-color);
+  color: var(--text-color);
 }
 
 .nav-links a.active::after {
   width: 100%;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.nav-link-text {
+  color: var(--text-color);
+  font-weight: 500;
+  transition: all var(--transition-speed) ease;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  padding: 0.8rem 0;
+}
+
+.nav-dropdown:hover .nav-link-text {
+  color: var(--text-color);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem 0;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.8rem 1.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: 1px;
+}
+
+.dropdown-menu a::after {
+  display: none;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-color);
+  padding-left: 2rem;
+}
+
+.dropdown-menu a.active {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
 }
 
 @media (max-width: 1024px) {
@@ -216,6 +294,7 @@ onUnmounted(() => {
   .nav-links.active a:nth-child(1) { transition-delay: 0.1s; }
   .nav-links.active a:nth-child(2) { transition-delay: 0.2s; }
   .nav-links.active a:nth-child(3) { transition-delay: 0.3s; }
+  .nav-links.active a:nth-child(4) { transition-delay: 0.4s; }
 
   .brand-text {
     font-size: 1.5rem;
@@ -225,6 +304,33 @@ onUnmounted(() => {
   .brand-subtitle {
     font-size: 0.7rem;
     letter-spacing: 2px;
+  }
+
+  .nav-dropdown {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 0.5rem;
+  }
+
+  .dropdown-menu a {
+    font-size: 1rem;
+    padding: 0.8rem 0;
+  }
+
+  .dropdown-menu a:hover {
+    padding-left: 0;
+    background: transparent;
   }
 }
 </style>

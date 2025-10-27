@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../components/Home.vue'
-import Gallery from '../components/Gallery.vue'
-import About from '../components/About.vue'
+import DigitalModels from '../components/DigitalModels.vue'
+import KeyProject from '../components/KeyProject.vue'
+import Project2 from '../components/Project2.vue'
+import Figurines from '../components/Figurines.vue'
 import Contact from '../components/Contact.vue'
 
 const routes = [
@@ -11,14 +13,24 @@ const routes = [
     component: Home
   },
   {
-    path: '/gallery',
-    name: 'Gallery',
-    component: Gallery
+    path: '/digital-models',
+    name: 'DigitalModels',
+    component: DigitalModels
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: '/digital-models/key-project',
+    name: 'KeyProject',
+    component: KeyProject
+  },
+  {
+    path: '/digital-models/project-2',
+    name: 'Project2',
+    component: Project2
+  },
+  {
+    path: '/figurines',
+    name: 'Figurines',
+    component: Figurines
   },
   {
     path: '/contact',

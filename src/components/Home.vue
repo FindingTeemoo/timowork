@@ -25,6 +25,9 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+import { modelCache } from '../utils/modelCache.js';
+
 const categories = [
   {
     title: '3D Models',
@@ -45,6 +48,20 @@ const categories = [
     link: '/gallery'
   }
 ];
+
+// Preload 3D model for instant display on Digital Models page
+onMounted(async () => {
+  console.log('Starting 3D model preload...');
+  try {
+    await Promise.all([
+      modelCache.preload('/key%20v32.obj'),
+      modelCache.preload('/helmet.obj')
+    ]);
+    console.log('All models preloaded successfully!');
+  } catch (error) {
+    console.error('Error preloading models:', error);
+  }
+});
 </script>
 
 <style scoped>
