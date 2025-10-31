@@ -5,31 +5,18 @@
       <p class="description">Explore a curated collection of digital artworks</p>
     </div>
 
-    <!-- Category Filters -->
-    <div class="filter-bar">
-      <button 
-        v-for="category in categories" 
-        :key="category"
-        @click="selectedCategory = category"
-        :class="['filter-btn', { active: selectedCategory === category }]"
-      >
-        {{ category }}
-      </button>
-    </div>
-
     <!-- Gallery Grid -->
     <div class="gallery-grid">
       <div 
-        v-for="(artwork, index) in filteredArtworks" 
+        v-for="(artwork, index) in artworks" 
         :key="artwork.id"
-        :class="['artwork-item', `size-${artwork.size}`]"
-        @click="openArtwork(getArtworkIndex(artwork))"
+        class="artwork-item"
+        @click="openArtwork(index)"
       >
         <img :src="artwork.image" :alt="artwork.title">
         <div class="artwork-overlay">
           <div class="artwork-info-preview">
             <h3>{{ artwork.title }}</h3>
-            <p class="category-tag">{{ artwork.category }}</p>
           </div>
         </div>
       </div>
@@ -57,52 +44,35 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const selectedArtwork = ref(null);
-const selectedCategory = ref('All');
-
-const categories = ['All', 'Abstract', 'Characters', 'Landscapes', 'Surreal', 'Experimental'];
 
 const artworks = [
-  // Abstract & Surreal
-  { id: 1, title: 'Across', image: '/images/digital-art/across 2.jpg', description: 'Ethereal journey through abstract landscapes', category: 'Abstract', size: 'large' },
-  { id: 2, title: 'Branches', image: '/images/digital-art/Branches_ 2.jpg', description: 'Organic patterns and flowing forms', category: 'Abstract', size: 'medium' },
-  { id: 3, title: 'The Lake', image: '/images/digital-art/The_Lake 2.jpg', description: 'Serene water reflections', category: 'Landscapes', size: 'large' },
-  { id: 4, title: 'Vision', image: '/images/digital-art/Vision 2.jpg', description: 'Kaleidoscopic perspective', category: 'Surreal', size: 'medium' },
-  { id: 5, title: 'Sharp', image: '/images/digital-art/Sharp_ 2.jpg', description: 'Dynamic angular compositions', category: 'Abstract', size: 'medium' },
-  
-  // Characters & Figures
-  { id: 6, title: 'Chef', image: '/images/digital-art/Chef.jpg', description: 'Colorful culinary character', category: 'Characters', size: 'medium' },
-  { id: 7, title: 'Cry', image: '/images/digital-art/Cry 3.jpg', description: 'Emotional expression study', category: 'Characters', size: 'small' },
-  { id: 8, title: 'In The Dark', image: '/images/digital-art/In_The_Dark 2.jpg', description: 'Mysterious shadowed portrait', category: 'Characters', size: 'medium' },
-  { id: 9, title: 'Monster', image: '/images/digital-art/Monster_ 2.jpg', description: 'Creature from imagination', category: 'Characters', size: 'large' },
-  { id: 10, title: 'Potato', image: '/images/digital-art/Potato 2.jpg', description: 'Whimsical character design', category: 'Characters', size: 'small' },
-  { id: 11, title: 'Virus', image: '/images/digital-art/Virus 2.jpg', description: 'Abstract biological forms', category: 'Surreal', size: 'medium' },
-  
-  // Experimental Series
-  { id: 12, title: 'Paint', image: '/images/digital-art/Paint 2.jpg', description: 'Expressive brushwork study', category: 'Experimental', size: 'medium' },
-  { id: 13, title: 'Untitled Vision', image: '/images/digital-art/Untitled_Artwork.jpg', description: 'Exploratory digital composition', category: 'Experimental', size: 'large' },
-  { id: 14, title: 'Study 10', image: '/images/digital-art/Untitled_Artwork 10.jpg', description: 'Color and form exploration', category: 'Experimental', size: 'medium' },
-  { id: 15, title: 'Study 14', image: '/images/digital-art/Untitled_Artwork 14.jpg', description: 'Abstract digital painting', category: 'Abstract', size: 'small' },
-  { id: 16, title: 'Study 15', image: '/images/digital-art/Untitled_Artwork 15.jpg', description: 'Organic flowing patterns', category: 'Abstract', size: 'large' },
-  { id: 17, title: 'Study 16', image: '/images/digital-art/Untitled_Artwork 16.jpg', description: 'Geometric abstraction', category: 'Abstract', size: 'medium' },
-  { id: 18, title: 'Study 17', image: '/images/digital-art/Untitled_Artwork 17.jpg', description: 'Minimalist composition', category: 'Experimental', size: 'small' },
-  { id: 19, title: 'Study 21', image: '/images/digital-art/Untitled_Artwork 21.jpg', description: 'Dynamic color play', category: 'Abstract', size: 'medium' },
-  { id: 20, title: 'Study 23', image: '/images/digital-art/Untitled_Artwork 23.jpg', description: 'Textured digital landscape', category: 'Landscapes', size: 'large' },
-  { id: 21, title: 'Study 33', image: '/images/digital-art/Untitled_Artwork 33.jpg', description: 'Ethereal atmosphere', category: 'Surreal', size: 'medium' },
-  { id: 22, title: 'Study 34', image: '/images/digital-art/Untitled_Artwork 34.jpg', description: 'Bold experimental work', category: 'Experimental', size: 'large' },
-  { id: 23, title: 'Study 41', image: '/images/digital-art/Untitled_Artwork 41.jpg', description: 'Complex layered composition', category: 'Experimental', size: 'medium' }
+  { id: 1, title: 'Across', image: '/images/digital-art/across 2.jpg', description: 'Ethereal journey through abstract landscapes' },
+  { id: 2, title: 'Branches', image: '/images/digital-art/Branches_ 2.jpg', description: 'Organic patterns and flowing forms' },
+  { id: 3, title: 'The Lake', image: '/images/digital-art/The_Lake 2.jpg', description: 'Serene water reflections' },
+  { id: 4, title: 'Vision', image: '/images/digital-art/Vision 2.jpg', description: 'Kaleidoscopic perspective' },
+  { id: 5, title: 'Sharp', image: '/images/digital-art/Sharp_ 2.jpg', description: 'Dynamic angular compositions' },
+  { id: 6, title: 'Chef', image: '/images/digital-art/Chef.jpg', description: 'Colorful culinary character' },
+  { id: 7, title: 'Cry', image: '/images/digital-art/Cry 3.jpg', description: 'Emotional expression study' },
+  { id: 8, title: 'In The Dark', image: '/images/digital-art/In_The_Dark 2.jpg', description: 'Mysterious shadowed portrait' },
+  { id: 9, title: 'Monster', image: '/images/digital-art/Monster_ 2.jpg', description: 'Creature from imagination' },
+  { id: 10, title: 'Potato', image: '/images/digital-art/Potato 2.jpg', description: 'Whimsical character design' },
+  { id: 11, title: 'Virus', image: '/images/digital-art/Virus 2.jpg', description: 'Abstract biological forms' },
+  { id: 12, title: 'Paint', image: '/images/digital-art/Paint 2.jpg', description: 'Expressive brushwork study' },
+  { id: 13, title: 'Untitled Vision', image: '/images/digital-art/Untitled_Artwork.jpg', description: 'Exploratory digital composition' },
+  { id: 14, title: 'Study 10', image: '/images/digital-art/Untitled_Artwork 10.jpg', description: 'Color and form exploration' },
+  { id: 15, title: 'Study 14', image: '/images/digital-art/Untitled_Artwork 14.jpg', description: 'Abstract digital painting' },
+  { id: 16, title: 'Study 15', image: '/images/digital-art/Untitled_Artwork 15.jpg', description: 'Organic flowing patterns' },
+  { id: 17, title: 'Study 16', image: '/images/digital-art/Untitled_Artwork 16.jpg', description: 'Geometric abstraction' },
+  { id: 18, title: 'Study 17', image: '/images/digital-art/Untitled_Artwork 17.jpg', description: 'Minimalist composition' },
+  { id: 19, title: 'Study 21', image: '/images/digital-art/Untitled_Artwork 21.jpg', description: 'Dynamic color play' },
+  { id: 20, title: 'Study 23', image: '/images/digital-art/Untitled_Artwork 23.jpg', description: 'Textured digital landscape' },
+  { id: 21, title: 'Study 33', image: '/images/digital-art/Untitled_Artwork 33.jpg', description: 'Ethereal atmosphere' },
+  { id: 22, title: 'Study 34', image: '/images/digital-art/Untitled_Artwork 34.jpg', description: 'Bold experimental work' },
+  { id: 23, title: 'Study 41', image: '/images/digital-art/Untitled_Artwork 41.jpg', description: 'Complex layered composition' }
 ];
-
-const filteredArtworks = computed(() => {
-  if (selectedCategory.value === 'All') return artworks;
-  return artworks.filter(art => art.category === selectedCategory.value);
-});
-
-const getArtworkIndex = (artwork) => {
-  return artworks.findIndex(art => art.id === artwork.id);
-};
 
 const openArtwork = (index) => {
   selectedArtwork.value = index;
@@ -159,48 +129,12 @@ onUnmounted(() => {
   font-weight: 300;
 }
 
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 2rem;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 0.7rem 1.8rem;
-  background: transparent;
-  border: 2px solid var(--border-color);
-  color: var(--text-color);
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 400;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-}
-
-.filter-btn:hover {
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-  transform: translateY(-2px);
-}
-
-.filter-btn.active {
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-  color: var(--background-color);
-}
-
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
+  columns: 4 300px;
+  column-gap: 1.5rem;
   padding: 2rem 3rem;
   max-width: 1600px;
   margin: 0 auto;
-  grid-auto-flow: dense;
 }
 
 .artwork-item {
@@ -211,22 +145,10 @@ onUnmounted(() => {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--card-background);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.artwork-item.size-small {
-  grid-row: span 1;
-  aspect-ratio: 1;
-}
-
-.artwork-item.size-medium {
-  grid-row: span 2;
-  aspect-ratio: 3/4;
-}
-
-.artwork-item.size-large {
-  grid-column: span 2;
-  grid-row: span 2;
-  aspect-ratio: 16/10;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  width: 100%;
 }
 
 .artwork-item:hover {
@@ -278,20 +200,7 @@ onUnmounted(() => {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 300;
-  margin-bottom: 0.5rem;
   letter-spacing: 1px;
-}
-
-.category-tag {
-  display: inline-block;
-  padding: 0.3rem 0.8rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 400;
 }
 
 .artwork-card:hover .artwork-image img {
@@ -397,13 +306,20 @@ onUnmounted(() => {
 
 @media (max-width: 1200px) {
   .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    columns: 3 280px;
     padding: 2rem;
   }
+}
 
-  .artwork-item.size-large {
-    grid-column: span 1;
-    aspect-ratio: 4/3;
+@media (max-width: 900px) {
+  .gallery-grid {
+    columns: 2 250px;
+    padding: 1.5rem;
+    column-gap: 1.2rem;
+  }
+  
+  .artwork-item {
+    margin-bottom: 1.2rem;
   }
 }
 
@@ -421,23 +337,12 @@ onUnmounted(() => {
   }
 
   .gallery-grid {
-    grid-template-columns: 1fr;
+    columns: 1;
     padding: 1.5rem;
-    gap: 1.5rem;
   }
 
-  .artwork-item.size-large {
-    grid-row: span 1;
-  }
-
-  .filter-bar {
-    padding: 1.5rem 1rem;
-    gap: 0.8rem;
-  }
-
-  .filter-btn {
-    padding: 0.6rem 1.4rem;
-    font-size: 0.85rem;
+  .artwork-item {
+    margin-bottom: 1.5rem;
   }
 
   .artwork-info h3 {
