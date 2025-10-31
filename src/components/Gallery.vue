@@ -1,318 +1,419 @@
 <template>
   <div class="gallery">
-    <div class="hero-section">
-      <h1>WELCOME</h1>
-      <p class="subtitle">LIGHTBOX - a place where I showcase some of my art!</p>
-      <p class="description">Discover my collection of Digital art, 3D models and figurines</p>
-      <div class="hero-button">
-        <router-link to="/gallery" class="explore-btn">Explore</router-link>
-      </div>
-    </div>
-    
-    <div class="filter-section">
-      <button 
-        v-for="category in categories" 
-        :key="category"
-        :class="{ active: selectedCategory === category }"
-        @click="selectedCategory = category"
-        class="filter-btn"
-      >
-        {{ category }}
-      </button>
+    <div class="gallery-header">
+      <h1 class="page-title">Digital Art Gallery</h1>
+      <p class="description">Experience art in a virtual exhibition space</p>
     </div>
 
-    <div class="artwork-grid">
-      <div 
-        v-for="artwork in filteredArtworks" 
-        :key="artwork.id" 
-        class="artwork-card"
-        @click="openArtwork(artwork)"
-      >
-        <div class="artwork-image">
-          <img :src="artwork.image" :alt="artwork.title">
+    <div class="gallery-space">
+      <div class="gallery-room">
+        <!-- Left Wall -->
+        <div class="wall left-wall">
+          <div class="artwork artwork-1" @click="openArtwork(0)">
+            <img src="/images/key/key_front.jpg" alt="Artwork 1">
+            <div class="artwork-frame"></div>
+            <div class="artwork-light"></div>
+          </div>
+          <div class="artwork artwork-2" @click="openArtwork(1)">
+            <img src="/images/key/key_45deg.jpg" alt="Artwork 2">
+            <div class="artwork-frame"></div>
+            <div class="artwork-light"></div>
+          </div>
         </div>
-        <div class="artwork-info">
-          <h3>{{ artwork.title }}</h3>
-          <p>{{ artwork.description }}</p>
-          <span class="category-tag">{{ artwork.category }}</span>
+
+        <!-- Center Wall -->
+        <div class="wall center-wall">
+          <div class="artwork artwork-featured" @click="openArtwork(2)">
+            <img src="/images/tufcat/tufcat_main.jpg" alt="Featured Artwork">
+            <div class="artwork-frame"></div>
+            <div class="artwork-light"></div>
+          </div>
         </div>
+
+        <!-- Right Wall -->
+        <div class="wall right-wall">
+          <div class="artwork artwork-3" @click="openArtwork(3)">
+            <img src="/images/key/key_back.jpg" alt="Artwork 3">
+            <div class="artwork-frame"></div>
+            <div class="artwork-light"></div>
+          </div>
+          <div class="artwork artwork-4" @click="openArtwork(4)">
+            <img src="/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif" alt="Artwork 4">
+            <div class="artwork-frame"></div>
+            <div class="artwork-light"></div>
+          </div>
+        </div>
+
+        <!-- Floor -->
+        <div class="floor"></div>
       </div>
     </div>
 
-    <!-- Artwork Modal -->
-    <div v-if="selectedArtwork" class="modal" @click="closeArtwork">
-      <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="closeArtwork">&times;</button>
-        <img :src="selectedArtwork.image" :alt="selectedArtwork.title">
-        <div class="modal-info">
-          <h2>{{ selectedArtwork.title }}</h2>
-          <p>{{ selectedArtwork.description }}</p>
-          <p class="artwork-details">{{ selectedArtwork.details }}</p>
+    <!-- Lightbox Modal -->
+    <Transition name="lightbox">
+      <div v-if="selectedArtwork !== null" class="lightbox-overlay" @click="closeArtwork">
+        <button class="lightbox-close" @click="closeArtwork" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="lightbox-content" @click.stop>
+          <img :src="artworks[selectedArtwork].image" :alt="artworks[selectedArtwork].title">
+          <div class="artwork-info">
+            <h3>{{ artworks[selectedArtwork].title }}</h3>
+            <p>{{ artworks[selectedArtwork].description }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const categories = ['All', 'Digital Art', '3D Models', 'Figurines'];
-const selectedCategory = ref('All');
 const selectedArtwork = ref(null);
 
 const artworks = [
-  {
-    id: 1,
-    title: 'Key Model - Front View',
-    description: 'Detailed 3D Key Model',
-    details: 'Front view of the key model showing intricate details and precise modeling',
-    image: '/images/key_front.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 2,
-    title: 'Key Model - Back View',
-    description: '3D Key Modeling',
-    details: 'Back view showcasing the detailed geometry and texturing',
-    image: '/images/key_back.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 3,
-    title: 'Key Model - Side View',
-    description: 'Side Profile',
-    details: 'Side perspective highlighting the key\'s profile and dimensions',
-    image: '/images/key_leftside.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 4,
-    title: 'Key Model - 45° View',
-    description: 'Angled Perspective',
-    details: 'Diagonal view showing the key\'s three-dimensional form',
-    image: '/images/key_45deg.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 5,
-    title: 'Key - Bottom Detail',
-    description: 'Bottom Perspective',
-    details: 'Detailed view of the key\'s bottom section',
-    image: '/images/key-bot.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 6,
-    title: 'Key in Black',
-    description: 'Alternative Render',
-    details: 'Black material variation showing form and shadows',
-    image: '/images/key-black.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 7,
-    title: 'Key Mold - First Half',
-    description: 'Manufacturing Process',
-    details: 'First half of the key mold design for production',
-    image: '/images/key mould.jpg',
-    category: '3D Models'
-  },
-  {
-    id: 8,
-    title: 'Key Mold - Second Half',
-    description: 'Manufacturing Process',
-    details: 'Second half of the key mold completing the production design',
-    image: '/images/key mould_secondhalf.jpg',
-    category: '3D Models'
-  }
+  { title: 'KeyZ - Front View', image: '/images/key/key_front.jpg', description: 'Detailed front perspective of the ornate key model' },
+  { title: 'KeyZ - Angle View', image: '/images/key/key_45deg.jpg', description: 'Dynamic 45-degree angle showcasing depth and detail' },
+  { title: 'TufcaT', image: '/images/tufcat/tufcat_main.jpg', description: 'Featured 3D model with intricate design elements' },
+  { title: 'KeyZ - Back View', image: '/images/key/key_back.jpg', description: 'Reverse perspective revealing hidden details' },
+  { title: 'Figurine Collection', image: '/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif', description: 'Hand-crafted miniature sculpture' }
 ];
 
-const filteredArtworks = computed(() => {
-  if (selectedCategory.value === 'All') return artworks;
-  return artworks.filter(artwork => artwork.category === selectedCategory.value);
-});
-
-const openArtwork = (artwork) => {
-  selectedArtwork.value = artwork;
+const openArtwork = (index) => {
+  selectedArtwork.value = index;
   document.body.style.overflow = 'hidden';
 };
 
 const closeArtwork = () => {
   selectedArtwork.value = null;
-  document.body.style.overflow = 'auto';
+  document.body.style.overflow = '';
 };
+
+const handleKeydown = (e) => {
+  if (e.key === 'Escape' && selectedArtwork.value !== null) {
+    closeArtwork();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown);
+  document.body.style.overflow = '';
+});
 </script>
 
 <style scoped>
 .gallery {
-  padding-top: 6rem;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1a1a1a 0%, #2d2d2d 100%);
+  padding-top: 80px;
+  overflow-x: hidden;
 }
 
-.hero-section {
+.gallery-header {
   text-align: center;
-  padding: 12rem 2rem;
-  background: var(--background-color);
-  color: white;
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  min-height: 90vh;
+  padding: 3rem 2rem 2rem;
+  color: #ffffff;
 }
 
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center, var(--accent-color) 0%, transparent 70%);
-  opacity: 0.1;
-  animation: pulse 4s infinite;
-}
-
-.hero-section h1 {
+.page-title {
+  font-family: var(--font-heading);
   font-size: 3.5rem;
   margin-bottom: 1rem;
-  font-family: var(--font-heading);
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-.subtitle {
-  font-size: 1.4rem;
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out 0.3s forwards;
-  font-family: var(--font-heading);
-  margin-bottom: 1rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 .description {
-  font-size: 1.2rem;
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out 0.6s forwards;
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-weight: 300;
 }
 
-.explore-btn {
-  display: inline-block;
-  padding: 1rem 3rem;
-  background: var(--accent-color);
-  color: var(--background-color);
-  text-decoration: none;
-  border-radius: 50px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  transition: all var(--transition-speed) ease;
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out 0.9s forwards;
-}
-
-.explore-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-}
-
-.filter-section {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-  padding: 0 1rem;
-}
-
-.filter-btn {
-  padding: 0.5rem 1.5rem;
-  border: 2px solid var(--accent-color);
-  background: transparent;
-  color: var(--accent-color);
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-  background: var(--accent-color);
-  color: white;
-}
-
-.artwork-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2.5rem;
+.gallery-space {
+  perspective: 1500px;
   padding: 2rem;
+  min-height: 70vh;
+}
+
+.gallery-room {
+  position: relative;
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  transform-style: preserve-3d;
+  transform: rotateX(5deg) rotateY(0deg);
+  transition: transform 0.5s ease;
 }
 
-.artwork-card {
+.wall {
   position: relative;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  background: var(--card-background);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: all var(--transition-speed) ease;
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  min-height: 400px;
+}
+
+.left-wall {
+  transform: translateZ(50px) translateX(-100px);
+  opacity: 0.9;
+}
+
+.center-wall {
+  transform: translateZ(100px);
+  margin: 2rem 0;
+}
+
+.right-wall {
+  transform: translateZ(50px) translateX(100px);
+  opacity: 0.9;
+}
+
+.floor {
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, 
+    rgba(100, 100, 100, 0.3) 0%,
+    rgba(50, 50, 50, 0.5) 50%,
+    rgba(20, 20, 20, 0.8) 100%);
+  transform: rotateX(85deg) translateY(150px);
+  transform-origin: top;
+}
+
+.artwork {
+  position: relative;
   cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
 }
 
-.artwork-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+.artwork-1, .artwork-2, .artwork-3, .artwork-4 {
+  width: 300px;
+  height: 300px;
 }
 
-.artwork-image {
-  position: relative;
-  overflow: hidden;
-}
-
-.artwork-image img {
-  width: 100%;
+.artwork-featured {
+  width: 500px;
   height: 400px;
-  object-fit: contain;
-  background: var(--card-background);
-  padding: 1rem;
-  transition: transform var(--transition-speed) ease;
+}
+
+.artwork:hover {
+  transform: translateZ(30px) scale(1.05);
+}
+
+.artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.artwork-frame {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border: 15px solid #8B7355;
+  border-radius: 4px;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.3),
+    0 5px 20px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.artwork-light {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 50px;
+  background: linear-gradient(to bottom, 
+    rgba(255, 248, 220, 0.3) 0%,
+    rgba(255, 248, 220, 0.1) 50%,
+    transparent 100%);
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(10px);
 }
 
 .artwork-card:hover .artwork-image img {
   transform: scale(1.05);
 }
 
+/* Lightbox Styles */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.lightbox-close svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
 .artwork-info {
-  padding: 1.5rem;
-  background: var(--card-background);
+  text-align: center;
+  color: white;
 }
 
 .artwork-info h3 {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-  color: var(--primary-color);
   font-family: var(--font-heading);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
 }
 
 .artwork-info p {
-  color: #666;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
-.category-tag {
-  display: inline-block;
-  padding: 0.3rem 1rem;
-  background: var(--accent-color);
-  color: white;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 500;
+.lightbox-enter-active,
+.lightbox-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-enter-from,
+.lightbox-leave-to {
+  opacity: 0;
+}
+
+.lightbox-enter-active .lightbox-content,
+.lightbox-leave-active .lightbox-content {
+  transition: transform 0.3s ease;
+}
+
+.lightbox-enter-from .lightbox-content,
+.lightbox-leave-to .lightbox-content {
+  transform: scale(0.9);
+}
+
+@media (max-width: 1024px) {
+  .gallery-room {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+
+  .left-wall,
+  .center-wall,
+  .right-wall {
+    transform: none;
+    opacity: 1;
+  }
+
+  .wall {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .artwork-1, .artwork-2, .artwork-3, .artwork-4 {
+    width: 280px;
+    height: 280px;
+  }
+
+  .artwork-featured {
+    width: 400px;
+    height: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .gallery-header {
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  .artwork-1, .artwork-2, .artwork-3, .artwork-4 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .artwork-featured {
+    width: 300px;
+    height: 240px;
+  }
+
+  .artwork-info h3 {
+    font-size: 1.5rem;
+  }
+
+  .artwork-info p {
+    font-size: 0.9rem;
+  }
 }
 
 /* Modal Styles */

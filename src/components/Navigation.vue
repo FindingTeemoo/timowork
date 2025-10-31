@@ -23,25 +23,12 @@
           </svg>
         </router-link>
         <div class="dropdown-menu" :class="{ 'show': showDropdown }">
-          <router-link to="/digital-models/key-project" @click="handleDropdownClick" active-class="active">
-            <span class="dropdown-item-icon">🔑</span>
-            <div class="dropdown-item-content">
-              <span class="dropdown-item-title">KeyZ</span>
-              <span class="dropdown-item-description">Key restoration project</span>
-            </div>
-          </router-link>
-          <router-link to="/digital-models/project-2" @click="handleDropdownClick" active-class="active">
-            <span class="dropdown-item-icon">🐱</span>
-            <div class="dropdown-item-content">
-              <span class="dropdown-item-title">TufcaT</span>
-              <span class="dropdown-item-description">Character modeling</span>
-            </div>
-          </router-link>
+          <router-link to="/digital-models/key-project" @click="handleDropdownClick" active-class="active">KeyZ</router-link>
+          <router-link to="/digital-models/project-2" @click="handleDropdownClick" active-class="active">TufcaT</router-link>
         </div>
       </div>
       <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
-      <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
-      <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
+      <router-link to="/gallery" @click="closeMenu" active-class="active">Digital Art</router-link>
       <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
     </div>
   </nav>

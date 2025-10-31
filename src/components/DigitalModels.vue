@@ -18,7 +18,6 @@
             </div>
           </div>
           <h3 class="project-title">{{ project.title }}</h3>
-          <p class="project-description">{{ project.description }}</p>
         </router-link>
       </div>
     </div>
@@ -35,8 +34,8 @@ const projects = [
   },
   {
     title: 'TufcaT',
-    description: 'Character modeling project featuring detailed design',
-    image: '/images/key/key_45deg.jpg',
+    description: 'A detailed 3D model showcasing intricate design and craftsmanship',
+    image: '/images/tufcat/tufcat_main.png',
     link: '/digital-models/project-2'
   }
 ];
@@ -44,56 +43,58 @@ const projects = [
 
 <style scoped>
 .digital-models {
-  padding: 120px 4rem 4rem;
+  padding: 140px 5rem 6rem;
   min-height: 100vh;
   background-color: var(--background-color);
 }
 
 .content-wrapper {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   text-align: center;
 }
 
 .page-title {
   font-family: var(--font-heading);
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
   color: var(--text-color);
-  font-weight: 400;
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
 .description {
-  max-width: 800px;
-  margin: 0 auto 3rem;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 5rem;
+  font-size: 1rem;
+  line-height: 1.8;
   color: var(--text-color);
-  opacity: 0.8;
+  opacity: 0.7;
+  font-weight: 300;
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 4rem;
   padding: 2rem 0;
 }
 
 .project-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-decoration: none;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--card-background);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .project-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
 .project-image {
@@ -101,17 +102,23 @@ const projects = [
   aspect-ratio: 16 / 9;
   overflow: hidden;
   position: relative;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .project-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  object-fit: contain;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(1);
 }
 
 .project-card:hover .project-image img {
-  transform: scale(1.1);
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 .project-overlay {
@@ -120,12 +127,13 @@ const projects = [
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(2px);
 }
 
 .project-card:hover .project-overlay {
@@ -134,19 +142,31 @@ const projects = [
 
 .view-project {
   color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  transform: translateY(10px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover .view-project {
+  transform: translateY(0);
 }
 
 .project-title {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--text-color);
-  font-weight: 400;
-  margin: 1.5rem 1rem 0.5rem;
-  padding: 0 1rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin: 2rem 0 2rem;
+  padding: 0 2rem;
+  transition: color 0.3s ease;
+}
+
+.project-card:hover .project-title {
+  color: var(--accent-color);
 }
 
 .project-description {
@@ -158,32 +178,36 @@ const projects = [
   padding: 0 1rem;
 }
 
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
 @media (max-width: 768px) {
   .digital-models {
-    padding: 100px 1rem 2rem;
+    padding: 120px 1.5rem 3rem;
   }
 
   .page-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 1rem;
   }
 
   .description {
     font-size: 0.95rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
 
   .projects-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   .project-title {
-    font-size: 1.5rem;
-  }
-
-  .project-description {
-    font-size: 0.9rem;
+    font-size: 1.6rem;
+    margin: 1.5rem 0 1.5rem;
   }
 }
 </style>

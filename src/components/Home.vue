@@ -14,7 +14,7 @@
         <p class="subtitle">LIGHTBOX - a place where I showcase some of my art!</p>
         <p class="description">Discover my collection of Digital art, 3D models and figurines.</p>
         <div class="hero-button">
-          <router-link to="/gallery" class="explore-btn">Explore</router-link>
+          <router-link to="/explore" class="explore-btn">Explore</router-link>
         </div>
       </div>
       <div class="hero-image" 
