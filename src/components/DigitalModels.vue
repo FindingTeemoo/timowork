@@ -6,7 +6,7 @@
       
       <div class="projects-grid">
         <router-link 
-          to="/digital-models/key-project" 
+          :to="project.link" 
           class="project-card"
           v-for="project in projects" 
           :key="project.title"
@@ -28,10 +28,16 @@
 <script setup>
 const projects = [
   {
-    title: '3D Key Project',
+    title: 'KeyZ',
     description: 'Interactive 3D model of an ornate vintage key with detailed craftsmanship',
-    image: '/images/key_front.jpg',
+    image: '/images/key/key_front.jpg',
     link: '/digital-models/key-project'
+  },
+  {
+    title: 'TufcaT',
+    description: 'Character modeling project featuring detailed design',
+    image: '/images/key/key_45deg.jpg',
+    link: '/digital-models/project-2'
   }
 ];
 </script>

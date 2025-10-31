@@ -11,14 +11,36 @@
       <span></span>
     </div>
     <div class="nav-links" :class="{ 'active': menuOpen }">
-      <router-link to="/" @click="closeMenu" exact-active-class="active">Home</router-link>
-      <div class="nav-dropdown" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-        <span class="nav-link-text">Digital Models</span>
+            <router-link to="/" @click="closeMenu" exact-active-class="active">Home</router-link>
+      <div class="nav-dropdown" 
+           @mouseenter="showDropdown = true" 
+           @mouseleave="showDropdown = false"
+           @click="toggleDropdown">
+        <router-link to="/digital-models" class="nav-link-text" @click="closeMenu">
+          Digital Models
+          <svg class="dropdown-icon" :class="{ 'rotated': showDropdown }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </router-link>
         <div class="dropdown-menu" :class="{ 'show': showDropdown }">
-          <router-link to="/digital-models/key-project" @click="closeMenu" active-class="active">KeyZ</router-link>
-          <router-link to="/digital-models/project-2" @click="closeMenu" active-class="active">TufcaT</router-link>
+          <router-link to="/digital-models/key-project" @click="handleDropdownClick" active-class="active">
+            <span class="dropdown-item-icon">🔑</span>
+            <div class="dropdown-item-content">
+              <span class="dropdown-item-title">KeyZ</span>
+              <span class="dropdown-item-description">Key restoration project</span>
+            </div>
+          </router-link>
+          <router-link to="/digital-models/project-2" @click="handleDropdownClick" active-class="active">
+            <span class="dropdown-item-icon">🐱</span>
+            <div class="dropdown-item-content">
+              <span class="dropdown-item-title">TufcaT</span>
+              <span class="dropdown-item-description">Character modeling</span>
+            </div>
+          </router-link>
         </div>
       </div>
+      <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
+      <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
       <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
       <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
     </div>
@@ -187,6 +209,28 @@ onUnmounted(() => {
   text-transform: uppercase;
   letter-spacing: 3px;
   padding: 0.8rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-link-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transition: width var(--transition-speed) ease;
+}
+
+.nav-link-text:hover::after,
+.nav-dropdown:hover .nav-link-text::after {
+  width: 100%;
 }
 
 .nav-dropdown:hover .nav-link-text {

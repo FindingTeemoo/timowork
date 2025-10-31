@@ -1,8 +1,14 @@
 <template>
   <div ref="container" class="model-viewer">
     <div v-if="loading" class="loading-overlay">
-      <div class="spinner"></div>
-      <p>Loading 3D Model...</p>
+      <div class="loader-container">
+        <div class="circles-loader">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+        </div>
+        <div class="loading-text">Loading Model</div>
+      </div>
     </div>
     <div v-if="!loading && showSpinText" class="spin-me-text">SPIN <span class="space"></span> ME</div>
   </div>
@@ -67,18 +73,23 @@ export default {
       renderer = new THREE.WebGLRenderer({
         antialias: true,
         preserveDrawingBuffer: true,
-        powerPreference: isHelmet ? 'default' : 'high-performance'
+        powerPreference: 'high-performance',
+        alpha: false,
+        stencil: false,
+        depth: true
       });
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
-      renderer.setPixelRatio(isHelmet ? Math.min(1.5, pixelRatio) : pixelRatio);
+      renderer.setPixelRatio(pixelRatio);
       renderer.setSize(width, height, false);
       renderer.domElement.width = width * pixelRatio;
       renderer.domElement.height = height * pixelRatio;
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';
       renderer.domElement.style.display = 'block';
+      renderer.domElement.style.imageRendering = 'high-quality';
+      renderer.domElement.style.imageRendering = '-webkit-optimize-contrast';
       container.value.appendChild(renderer.domElement);
       requestAnimationFrame(() => handleResize());
 
@@ -289,13 +300,18 @@ export default {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       
-  const pixelRatio = getPixelRatio();
+      const pixelRatio = getPixelRatio();
       renderer.setPixelRatio(pixelRatio);
       renderer.setSize(width, height, false);
       renderer.domElement.width = width * pixelRatio;
       renderer.domElement.height = height * pixelRatio;
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';
+      
+      // Force re-render at high quality
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
     };
 
     onMounted(() => {
@@ -350,6 +366,17 @@ export default {
   position: relative;
   z-index: 1;
   overflow: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.model-viewer canvas {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .loading-overlay {
@@ -366,24 +393,85 @@ export default {
   z-index: 10;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #333;
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.circles-loader {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.circle {
+  position: absolute;
+  border: 3px solid transparent;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+  border-top-color: var(--text-color);
+  animation: spin 2s linear infinite;
+}
+
+.circle-1 {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation-duration: 1.5s;
+  border-top-color: var(--text-color);
+  opacity: 0.8;
+}
+
+.circle-2 {
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  animation-duration: 2s;
+  animation-direction: reverse;
+  border-top-color: var(--text-color);
+  opacity: 0.6;
+}
+
+.circle-3 {
+  top: 30px;
+  left: 30px;
+  right: 30px;
+  bottom: 30px;
+  animation-duration: 1.2s;
+  border-top-color: var(--text-color);
+  opacity: 0.4;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.loading-overlay p {
-  color: #333;
-  font-size: 1rem;
+.loading-text {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-color);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .spin-me-text {

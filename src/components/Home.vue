@@ -17,7 +17,11 @@
           <router-link to="/gallery" class="explore-btn">Explore</router-link>
         </div>
       </div>
-      <div class="hero-image">
+      <div class="hero-image" 
+           @mouseenter="isPaused = true" 
+           @mouseleave="isPaused = false"
+           @click="isPaused = !isPaused"
+           :class="{ 'paused': isPaused }">
         <img src="/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif" alt="Hero Image">
       </div>
     </div>
@@ -25,7 +29,9 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+
+const isPaused = ref(false);
 import { modelCache } from '../utils/modelCache.js';
 
 const categories = [
@@ -166,6 +172,7 @@ onMounted(async () => {
   width: 100%;
   height: calc(100vh - 80px);
   position: relative;
+  cursor: pointer;
 }
 
 .hero-image img {
@@ -173,6 +180,16 @@ onMounted(async () => {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.hero-image.paused img {
+  animation-play-state: paused !important;
+  transform: scale(1) !important;
+}
+
+.hero-image:hover img {
+  animation-play-state: paused !important;
 }
 
 @media (max-width: 1024px) {
