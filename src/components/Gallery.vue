@@ -2,50 +2,36 @@
   <div class="gallery">
     <div class="gallery-header">
       <h1 class="page-title">Digital Art Gallery</h1>
-      <p class="description">Experience art in a virtual exhibition space</p>
+      <p class="description">Explore a curated collection of digital artworks</p>
     </div>
 
-    <div class="gallery-space">
-      <div class="gallery-room">
-        <!-- Left Wall -->
-        <div class="wall left-wall">
-          <div class="artwork artwork-1" @click="openArtwork(0)">
-            <img src="/images/key/key_front.jpg" alt="Artwork 1">
-            <div class="artwork-frame"></div>
-            <div class="artwork-light"></div>
-          </div>
-          <div class="artwork artwork-2" @click="openArtwork(1)">
-            <img src="/images/key/key_45deg.jpg" alt="Artwork 2">
-            <div class="artwork-frame"></div>
-            <div class="artwork-light"></div>
+    <!-- Category Filters -->
+    <div class="filter-bar">
+      <button 
+        v-for="category in categories" 
+        :key="category"
+        @click="selectedCategory = category"
+        :class="['filter-btn', { active: selectedCategory === category }]"
+      >
+        {{ category }}
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid">
+      <div 
+        v-for="(artwork, index) in filteredArtworks" 
+        :key="artwork.id"
+        :class="['artwork-item', `size-${artwork.size}`]"
+        @click="openArtwork(getArtworkIndex(artwork))"
+      >
+        <img :src="artwork.image" :alt="artwork.title">
+        <div class="artwork-overlay">
+          <div class="artwork-info-preview">
+            <h3>{{ artwork.title }}</h3>
+            <p class="category-tag">{{ artwork.category }}</p>
           </div>
         </div>
-
-        <!-- Center Wall -->
-        <div class="wall center-wall">
-          <div class="artwork artwork-featured" @click="openArtwork(2)">
-            <img src="/images/tufcat/tufcat_main.jpg" alt="Featured Artwork">
-            <div class="artwork-frame"></div>
-            <div class="artwork-light"></div>
-          </div>
-        </div>
-
-        <!-- Right Wall -->
-        <div class="wall right-wall">
-          <div class="artwork artwork-3" @click="openArtwork(3)">
-            <img src="/images/key/key_back.jpg" alt="Artwork 3">
-            <div class="artwork-frame"></div>
-            <div class="artwork-light"></div>
-          </div>
-          <div class="artwork artwork-4" @click="openArtwork(4)">
-            <img src="/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif" alt="Artwork 4">
-            <div class="artwork-frame"></div>
-            <div class="artwork-light"></div>
-          </div>
-        </div>
-
-        <!-- Floor -->
-        <div class="floor"></div>
       </div>
     </div>
 
@@ -71,17 +57,52 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const selectedArtwork = ref(null);
+const selectedCategory = ref('All');
+
+const categories = ['All', 'Abstract', 'Characters', 'Landscapes', 'Surreal', 'Experimental'];
 
 const artworks = [
-  { title: 'KeyZ - Front View', image: '/images/key/key_front.jpg', description: 'Detailed front perspective of the ornate key model' },
-  { title: 'KeyZ - Angle View', image: '/images/key/key_45deg.jpg', description: 'Dynamic 45-degree angle showcasing depth and detail' },
-  { title: 'TufcaT', image: '/images/tufcat/tufcat_main.jpg', description: 'Featured 3D model with intricate design elements' },
-  { title: 'KeyZ - Back View', image: '/images/key/key_back.jpg', description: 'Reverse perspective revealing hidden details' },
-  { title: 'Figurine Collection', image: '/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif', description: 'Hand-crafted miniature sculpture' }
+  // Abstract & Surreal
+  { id: 1, title: 'Across', image: '/images/digital-art/across 2.jpg', description: 'Ethereal journey through abstract landscapes', category: 'Abstract', size: 'large' },
+  { id: 2, title: 'Branches', image: '/images/digital-art/Branches_ 2.jpg', description: 'Organic patterns and flowing forms', category: 'Abstract', size: 'medium' },
+  { id: 3, title: 'The Lake', image: '/images/digital-art/The_Lake 2.jpg', description: 'Serene water reflections', category: 'Landscapes', size: 'large' },
+  { id: 4, title: 'Vision', image: '/images/digital-art/Vision 2.jpg', description: 'Kaleidoscopic perspective', category: 'Surreal', size: 'medium' },
+  { id: 5, title: 'Sharp', image: '/images/digital-art/Sharp_ 2.jpg', description: 'Dynamic angular compositions', category: 'Abstract', size: 'medium' },
+  
+  // Characters & Figures
+  { id: 6, title: 'Chef', image: '/images/digital-art/Chef.jpg', description: 'Colorful culinary character', category: 'Characters', size: 'medium' },
+  { id: 7, title: 'Cry', image: '/images/digital-art/Cry 3.jpg', description: 'Emotional expression study', category: 'Characters', size: 'small' },
+  { id: 8, title: 'In The Dark', image: '/images/digital-art/In_The_Dark 2.jpg', description: 'Mysterious shadowed portrait', category: 'Characters', size: 'medium' },
+  { id: 9, title: 'Monster', image: '/images/digital-art/Monster_ 2.jpg', description: 'Creature from imagination', category: 'Characters', size: 'large' },
+  { id: 10, title: 'Potato', image: '/images/digital-art/Potato 2.jpg', description: 'Whimsical character design', category: 'Characters', size: 'small' },
+  { id: 11, title: 'Virus', image: '/images/digital-art/Virus 2.jpg', description: 'Abstract biological forms', category: 'Surreal', size: 'medium' },
+  
+  // Experimental Series
+  { id: 12, title: 'Paint', image: '/images/digital-art/Paint 2.jpg', description: 'Expressive brushwork study', category: 'Experimental', size: 'medium' },
+  { id: 13, title: 'Untitled Vision', image: '/images/digital-art/Untitled_Artwork.jpg', description: 'Exploratory digital composition', category: 'Experimental', size: 'large' },
+  { id: 14, title: 'Study 10', image: '/images/digital-art/Untitled_Artwork 10.jpg', description: 'Color and form exploration', category: 'Experimental', size: 'medium' },
+  { id: 15, title: 'Study 14', image: '/images/digital-art/Untitled_Artwork 14.jpg', description: 'Abstract digital painting', category: 'Abstract', size: 'small' },
+  { id: 16, title: 'Study 15', image: '/images/digital-art/Untitled_Artwork 15.jpg', description: 'Organic flowing patterns', category: 'Abstract', size: 'large' },
+  { id: 17, title: 'Study 16', image: '/images/digital-art/Untitled_Artwork 16.jpg', description: 'Geometric abstraction', category: 'Abstract', size: 'medium' },
+  { id: 18, title: 'Study 17', image: '/images/digital-art/Untitled_Artwork 17.jpg', description: 'Minimalist composition', category: 'Experimental', size: 'small' },
+  { id: 19, title: 'Study 21', image: '/images/digital-art/Untitled_Artwork 21.jpg', description: 'Dynamic color play', category: 'Abstract', size: 'medium' },
+  { id: 20, title: 'Study 23', image: '/images/digital-art/Untitled_Artwork 23.jpg', description: 'Textured digital landscape', category: 'Landscapes', size: 'large' },
+  { id: 21, title: 'Study 33', image: '/images/digital-art/Untitled_Artwork 33.jpg', description: 'Ethereal atmosphere', category: 'Surreal', size: 'medium' },
+  { id: 22, title: 'Study 34', image: '/images/digital-art/Untitled_Artwork 34.jpg', description: 'Bold experimental work', category: 'Experimental', size: 'large' },
+  { id: 23, title: 'Study 41', image: '/images/digital-art/Untitled_Artwork 41.jpg', description: 'Complex layered composition', category: 'Experimental', size: 'medium' }
 ];
+
+const filteredArtworks = computed(() => {
+  if (selectedCategory.value === 'All') return artworks;
+  return artworks.filter(art => art.category === selectedCategory.value);
+});
+
+const getArtworkIndex = (artwork) => {
+  return artworks.findIndex(art => art.id === artwork.id);
+};
 
 const openArtwork = (index) => {
   selectedArtwork.value = index;
@@ -112,15 +133,15 @@ onUnmounted(() => {
 <style scoped>
 .gallery {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #1a1a1a 0%, #2d2d2d 100%);
+  background: var(--background-color);
   padding-top: 80px;
-  overflow-x: hidden;
+  padding-bottom: 4rem;
 }
 
 .gallery-header {
   text-align: center;
   padding: 3rem 2rem 2rem;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .page-title {
@@ -134,124 +155,143 @@ onUnmounted(() => {
 
 .description {
   font-size: 1.1rem;
-  opacity: 0.8;
+  opacity: 0.7;
   font-weight: 300;
 }
 
-.gallery-space {
-  perspective: 1500px;
-  padding: 2rem;
-  min-height: 70vh;
-}
-
-.gallery-room {
-  position: relative;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  transform-style: preserve-3d;
-  transform: rotateX(5deg) rotateY(0deg);
-  transition: transform 0.5s ease;
-}
-
-.wall {
-  position: relative;
+.filter-bar {
   display: flex;
-  gap: 3rem;
   justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  min-height: 400px;
+  gap: 1rem;
+  padding: 2rem;
+  flex-wrap: wrap;
 }
 
-.left-wall {
-  transform: translateZ(50px) translateX(-100px);
-  opacity: 0.9;
-}
-
-.center-wall {
-  transform: translateZ(100px);
-  margin: 2rem 0;
-}
-
-.right-wall {
-  transform: translateZ(50px) translateX(100px);
-  opacity: 0.9;
-}
-
-.floor {
-  position: absolute;
-  bottom: -50px;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(to bottom, 
-    rgba(100, 100, 100, 0.3) 0%,
-    rgba(50, 50, 50, 0.5) 50%,
-    rgba(20, 20, 20, 0.8) 100%);
-  transform: rotateX(85deg) translateY(150px);
-  transform-origin: top;
-}
-
-.artwork {
-  position: relative;
+.filter-btn {
+  padding: 0.7rem 1.8rem;
+  background: transparent;
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 25px;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
 }
 
-.artwork-1, .artwork-2, .artwork-3, .artwork-4 {
-  width: 300px;
-  height: 300px;
+.filter-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-2px);
 }
 
-.artwork-featured {
-  width: 500px;
-  height: 400px;
+.filter-btn.active {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--background-color);
 }
 
-.artwork:hover {
-  transform: translateZ(30px) scale(1.05);
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 3rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  grid-auto-flow: dense;
 }
 
-.artwork img {
+.artwork-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--card-background);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.artwork-item.size-small {
+  grid-row: span 1;
+  aspect-ratio: 1;
+}
+
+.artwork-item.size-medium {
+  grid-row: span 2;
+  aspect-ratio: 3/4;
+}
+
+.artwork-item.size-large {
+  grid-column: span 2;
+  grid-row: span 2;
+  aspect-ratio: 16/10;
+}
+
+.artwork-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.artwork-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 4px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease;
 }
 
-.artwork-frame {
-  position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-  border: 15px solid #8B7355;
-  border-radius: 4px;
-  box-shadow: 
-    inset 0 0 20px rgba(0, 0, 0, 0.3),
-    0 5px 20px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
-  z-index: -1;
+.artwork-item:hover img {
+  transform: scale(1.08);
 }
 
-.artwork-light {
+.artwork-overlay {
   position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120%;
-  height: 50px;
-  background: linear-gradient(to bottom, 
-    rgba(255, 248, 220, 0.3) 0%,
-    rgba(255, 248, 220, 0.1) 50%,
-    transparent 100%);
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(10px);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.artwork-item:hover .artwork-overlay {
+  opacity: 1;
+}
+
+.artwork-info-preview {
+  color: white;
+  transform: translateY(10px);
+  transition: transform 0.4s ease;
+}
+
+.artwork-item:hover .artwork-info-preview {
+  transform: translateY(0);
+}
+
+.artwork-info-preview h3 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
 }
 
 .artwork-card:hover .artwork-image img {
@@ -355,32 +395,15 @@ onUnmounted(() => {
   transform: scale(0.9);
 }
 
-@media (max-width: 1024px) {
-  .gallery-room {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-
-  .left-wall,
-  .center-wall,
-  .right-wall {
-    transform: none;
-    opacity: 1;
-  }
-
-  .wall {
-    flex-direction: column;
-    gap: 2rem;
+@media (max-width: 1200px) {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     padding: 2rem;
   }
 
-  .artwork-1, .artwork-2, .artwork-3, .artwork-4 {
-    width: 280px;
-    height: 280px;
-  }
-
-  .artwork-featured {
-    width: 400px;
-    height: 320px;
+  .artwork-item.size-large {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
   }
 }
 
@@ -397,14 +420,24 @@ onUnmounted(() => {
     padding: 2rem 1.5rem 1rem;
   }
 
-  .artwork-1, .artwork-2, .artwork-3, .artwork-4 {
-    width: 250px;
-    height: 250px;
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+    gap: 1.5rem;
   }
 
-  .artwork-featured {
-    width: 300px;
-    height: 240px;
+  .artwork-item.size-large {
+    grid-row: span 1;
+  }
+
+  .filter-bar {
+    padding: 1.5rem 1rem;
+    gap: 0.8rem;
+  }
+
+  .filter-btn {
+    padding: 0.6rem 1.4rem;
+    font-size: 0.85rem;
   }
 
   .artwork-info h3 {
@@ -413,6 +446,10 @@ onUnmounted(() => {
 
   .artwork-info p {
     font-size: 0.9rem;
+  }
+  
+  .artwork-info-preview h3 {
+    font-size: 1.1rem;
   }
 }
 
