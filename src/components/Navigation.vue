@@ -25,9 +25,26 @@
         <div class="dropdown-menu" :class="{ 'show': showDropdown }">
           <router-link to="/digital-models/key-project" @click="handleDropdownClick" active-class="active">KeyZ</router-link>
           <router-link to="/digital-models/project-2" @click="handleDropdownClick" active-class="active">TufcaT</router-link>
+          <router-link to="/digital-models/dino-project" @click="handleDropdownClick" active-class="active">Dino</router-link>
         </div>
       </div>
-      <router-link to="/figurines" @click="closeMenu" active-class="active">Figurines</router-link>
+      <div class="nav-dropdown" 
+           @mouseenter="showFigurinesDropdown = true" 
+           @mouseleave="showFigurinesDropdown = false"
+           @click="toggleFigurinesDropdown">
+        <router-link to="/figurines" class="nav-link-text" @click="closeMenu">
+          Figurines
+          <svg class="dropdown-icon" :class="{ 'rotated': showFigurinesDropdown }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </router-link>
+        <div class="dropdown-menu" :class="{ 'show': showFigurinesDropdown }">
+          <router-link to="/figurines/drip-monster" @click="handleDropdownClick" active-class="active">DripMonster</router-link>
+          <router-link to="/figurines/monster-hunter" @click="handleDropdownClick" active-class="active">Monster Hunter</router-link>
+          <router-link to="/figurines/keyz" @click="handleDropdownClick" active-class="active">KeyZ</router-link>
+          <router-link to="/figurines/one-piece-marine" @click="handleDropdownClick" active-class="active">One Piece Marine</router-link>
+        </div>
+      </div>
       <router-link to="/gallery" @click="closeMenu" active-class="active">Digital Art</router-link>
       <router-link to="/contact" @click="closeMenu" active-class="active">Contact</router-link>
     </div>
@@ -40,6 +57,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const scrolled = ref(false);
 const menuOpen = ref(false);
 const showDropdown = ref(false);
+const showFigurinesDropdown = ref(false);
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 50;
@@ -50,6 +68,22 @@ const toggleMenu = () => {
 };
 
 const closeMenu = () => {
+  menuOpen.value = false;
+  showDropdown.value = false;
+  showFigurinesDropdown.value = false;
+};
+
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value;
+};
+
+const toggleFigurinesDropdown = () => {
+  showFigurinesDropdown.value = !showFigurinesDropdown.value;
+};
+
+const handleDropdownClick = () => {
+  showDropdown.value = false;
+  showFigurinesDropdown.value = false;
   menuOpen.value = false;
 };
 

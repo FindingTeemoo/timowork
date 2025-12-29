@@ -37,6 +37,12 @@ const projects = [
     description: 'A detailed 3D model showcasing intricate design and craftsmanship',
     image: '/images/tufcat/tufcat_main.png',
     link: '/digital-models/project-2'
+  },
+  {
+    title: 'Dino',
+    description: 'A detailed 3D dinosaur model',
+    image: '/images/dino/dino_placeholder.jpg',
+    link: '/digital-models/dino-project'
   }
 ];
 </script>

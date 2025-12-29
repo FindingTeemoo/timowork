@@ -4,7 +4,10 @@ import Explore from '../components/Explore.vue'
 import DigitalModels from '../components/DigitalModels.vue'
 import KeyProject from '../components/KeyProject.vue'
 import Project2 from '../components/Project2.vue'
+import DinoProject from '../components/DinoProject.vue'
 import Figurines from '../components/Figurines.vue'
+import DripMonster from '../components/DripMonster.vue'
+import OnePieceMarine from '../components/OnePieceMarine.vue'
 import Gallery from '../components/Gallery.vue'
 import Contact from '../components/Contact.vue'
 
@@ -35,9 +38,24 @@ const routes = [
     component: Project2
   },
   {
+    path: '/digital-models/dino-project',
+    name: 'DinoProject',
+    component: DinoProject
+  },
+  {
     path: '/figurines',
     name: 'Figurines',
     component: Figurines
+  },
+  {
+    path: '/figurines/drip-monster',
+    name: 'DripMonster',
+    component: DripMonster
+  },
+  {
+    path: '/figurines/one-piece-marine',
+    name: 'OnePieceMarine',
+    component: OnePieceMarine
   },
   {
     path: '/gallery',
