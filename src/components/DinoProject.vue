@@ -1,7 +1,7 @@
 <template>
   <div class="dino-project">
     <div class="featured-model">
-      <ModelViewer modelPath="/dino%20v22.obj" />
+      <ModelViewer modelPath="/dino%20v22.obj" :modelColor="0xD4A057" :roughness="0.9" :metalness="0.1" />
     </div>
     <div class="rotating-text-container">
       <div class="rotating-text">
@@ -9,106 +9,11 @@
         <span>Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;Dino&nbsp;&nbsp;&nbsp;🦖&nbsp;&nbsp;&nbsp;</span>
       </div>
     </div>
-    <div class="content-wrapper">
-      <div class="models-grid">
-        <div class="model-card" v-for="(model, index) in models" :key="model.title">
-          <div class="model-image" @click="openLightbox(index)">
-            <img :src="model.image" :alt="model.title">
-            <div class="image-overlay">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-                <line x1="11" y1="8" x2="11" y2="14"></line>
-                <line x1="8" y1="11" x2="14" y2="11"></line>
-              </svg>
-            </div>
-          </div>
-          <h3 class="model-title">{{ model.title }}</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lightbox Modal -->
-    <Transition name="lightbox">
-      <div v-if="lightboxOpen" class="lightbox-overlay" @click="closeLightbox">
-        <button class="lightbox-close" @click="closeLightbox" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-        <button class="lightbox-nav lightbox-prev" @click.stop="prevImage" v-if="models.length > 1" aria-label="Previous">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
-        <button class="lightbox-nav lightbox-next" @click.stop="nextImage" v-if="models.length > 1" aria-label="Next">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-        <div class="lightbox-content" @click.stop>
-          <img :src="models[currentImageIndex].image" :alt="models[currentImageIndex].title">
-          <p class="lightbox-caption">{{ models[currentImageIndex].title }}</p>
-        </div>
-      </div>
-    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
 import ModelViewer from './ModelViewer.vue';
-
-const models = [
-  {
-    title: 'Dino Model',
-    image: '/images/dino/dino_placeholder.jpg'
-  }
-];
-
-const lightboxOpen = ref(false);
-const currentImageIndex = ref(0);
-
-const openLightbox = (index) => {
-  currentImageIndex.value = index;
-  lightboxOpen.value = true;
-  document.body.style.overflow = 'hidden';
-};
-
-const closeLightbox = () => {
-  lightboxOpen.value = false;
-  document.body.style.overflow = '';
-};
-
-const nextImage = () => {
-  currentImageIndex.value = (currentImageIndex.value + 1) % models.length;
-};
-
-const prevImage = () => {
-  currentImageIndex.value = (currentImageIndex.value - 1 + models.length) % models.length;
-};
-
-const handleKeydown = (e) => {
-  if (!lightboxOpen.value) return;
-  
-  if (e.key === 'Escape') {
-    closeLightbox();
-  } else if (e.key === 'ArrowRight') {
-    nextImage();
-  } else if (e.key === 'ArrowLeft') {
-    prevImage();
-  }
-};
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown);
-  document.body.style.overflow = '';
-});
 </script>
 
 <style scoped>

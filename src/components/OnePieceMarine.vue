@@ -61,15 +61,15 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 const models = [
   {
-    title: 'Side View',
+    title: '',
     image: '/images/one-piece-marine/IMG_1546.jpg'
   },
   {
-    title: 'Front View',
+    title: '',
     image: '/images/one-piece-marine/IMG_1547.jpg'
   },
   {
-    title: 'Detail View',
+    title: '',
     image: '/images/one-piece-marine/IMG_1549.jpg'
   }
 ];

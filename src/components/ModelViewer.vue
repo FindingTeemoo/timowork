@@ -30,6 +30,18 @@ export default {
     scale: {
       type: Number,
       default: 1.0
+    },
+    modelColor: {
+      type: Number,
+      default: 0xe8e8e8
+    },
+    roughness: {
+      type: Number,
+      default: null
+    },
+    metalness: {
+      type: Number,
+      default: null
     }
   },
   setup(props) {
@@ -177,16 +189,16 @@ export default {
             if (isHelmet) {
               // Simpler material for helmet for faster rendering
               child.material = new THREE.MeshStandardMaterial({
-                color: 0xe8e8e8,
-                metalness: 0.3,
-                roughness: 0.2,
+                color: props.modelColor,
+                metalness: props.metalness !== null ? props.metalness : 0.3,
+                roughness: props.roughness !== null ? props.roughness : 0.2,
               });
             } else {
               // High quality material for key
               child.material = new THREE.MeshPhysicalMaterial({
-                color: 0xe8e8e8,
-                metalness: 0.5,
-                roughness: 0.05,
+                color: props.modelColor,
+                metalness: props.metalness !== null ? props.metalness : 0.5,
+                roughness: props.roughness !== null ? props.roughness : 0.05,
                 clearcoat: 1.0,
                 clearcoatRoughness: 0.05,
               });

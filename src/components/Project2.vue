@@ -1,20 +1,12 @@
 <template>
   <div class="project-2">
     <div class="featured-model">
-      <ModelViewer modelPath="/helmet.obj" :scale="0.7" />
+      <ModelViewer modelPath="/helmet.obj" :scale="0.6" :modelColor="0xF5F5F0" :roughness="0.3" :metalness="0.7" />
     </div>
-    <div class="content-wrapper">
-      <h1 class="page-title">TufcaT</h1>
-      <p class="description">A detailed 3D model showcasing intricate design and craftsmanship. Rotate and explore the model from all angles.</p>
-      <p class="instruction">(CLICK AND DRAG TO ROTATE)</p>
-      
-      <div class="models-grid">
-        <div class="model-card" v-for="model in models" :key="model.title">
-          <div class="model-image">
-            <img :src="model.image" :alt="model.title">
-          </div>
-          <h3 class="model-title">{{ model.title }}</h3>
-        </div>
+    <div class="rotating-text-container">
+      <div class="rotating-text">
+        <span>TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;</span>
+        <span>TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;TufcaT&nbsp;&nbsp;&nbsp;🐱&nbsp;&nbsp;&nbsp;</span>
       </div>
     </div>
   </div>
@@ -22,21 +14,6 @@
 
 <script setup>
 import ModelViewer from './ModelViewer.vue';
-
-const models = [
-  {
-    title: 'View 1',
-    image: '/images/placeholder1.jpg'
-  },
-  {
-    title: 'View 2',
-    image: '/images/placeholder2.jpg'
-  },
-  {
-    title: 'View 3',
-    image: '/images/placeholder3.jpg'
-  }
-];
 </script>
 
 <style scoped>
@@ -50,83 +27,58 @@ const models = [
   height: 60vh;
   background-color: transparent;
   margin-top: 80px;
-}
-
-.content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 4rem 4rem;
-}
-
-.page-title {
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  color: var(--text-color);
-  font-weight: 400;
-}
-
-.description {
-  max-width: 800px;
-  margin: 0 auto 1rem;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  opacity: 0.8;
-}
-
-.instruction {
-  font-size: 0.9rem;
-  color: var(--text-color);
-  opacity: 0.6;
-  margin-bottom: 3rem;
-  letter-spacing: 1px;
-}
-
-.models-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 4rem;
-  padding: 2rem 0;
-}
-
-.model-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.model-card:hover {
-  transform: translateY(-10px);
-}
-
-.model-image {
-  width: 100%;
-  aspect-ratio: 1;
+  position: relative;
   overflow: hidden;
-  margin-bottom: 1rem;
+  transform: translateY(-60px);
 }
 
-.model-image img {
+.featured-model > * {
+  transform: none !important;
+  will-change: auto;
+}
+
+.rotating-text-container {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  overflow: hidden;
+  background: var(--background-color);
+  padding: 2.5rem 0;
+  position: relative;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.model-card:hover .model-image img {
-  transform: scale(1.05);
+.rotating-text {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: cylinderRotate 30s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+  transform: translateZ(0);
 }
 
-.model-title {
+.rotating-text span {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
-  color: var(--text-color);
+  font-size: 1.25rem;
   font-weight: 400;
-  margin: 0;
+  color: var(--text-color);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  display: inline-block;
+  padding-right: 0;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+@keyframes cylinderRotate {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -135,37 +87,13 @@ const models = [
     margin-top: 70px;
   }
 
-  .content-wrapper {
-    padding: 2rem 1rem;
+  .rotating-text-container {
+    padding: 1.5rem 0;
   }
 
-  .page-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .description {
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .instruction {
-    font-size: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .models-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-
-  .model-image {
-    margin-bottom: 0.5rem;
-  }
-
-  .model-title {
+  .rotating-text span {
     font-size: 1rem;
+    letter-spacing: 2px;
   }
 }
 </style>
