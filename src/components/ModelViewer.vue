@@ -491,19 +491,19 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 5vw, 3rem);
   font-weight: 700;
   color: rgba(0, 0, 0, 0.15);
   pointer-events: none;
   z-index: 5;
-  letter-spacing: 8px;
+  letter-spacing: clamp(4px, 1vw, 8px);
   user-select: none;
   animation: breathe 5s ease-in-out infinite;
 }
 
 .spin-me-text .space {
   display: inline-block;
-  width: 2rem;
+  width: clamp(1rem, 2vw, 2rem);
 }
 
 @keyframes breathe {

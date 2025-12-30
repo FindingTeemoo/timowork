@@ -4,6 +4,19 @@
       <h1 class="page-title">Digital Models</h1>
       <p class="description">Welcome to my gallery of unique digital models. Each model tells a unique story, inviting you to immerse yourself in the world of digital artistry. Browse through my collection of 3D projects.</p>
       
+      <div class="search-bar">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input 
+          type="text" 
+          v-model="searchQuery" 
+          placeholder="Search projects..."
+          class="search-input"
+        />
+      </div>
+      
       <div class="projects-grid">
         <router-link 
           :to="project.link" 
@@ -25,7 +38,11 @@
 </template>
 
 <script setup>
-const projects = [
+import { ref, computed } from 'vue';
+
+const searchQuery = ref('');
+
+const allProjects = [
   {
     title: 'KeyZ',
     description: 'Interactive 3D model of an ornate vintage key with detailed craftsmanship',
@@ -45,6 +62,16 @@ const projects = [
     link: '/digital-models/dino-project'
   }
 ];
+
+const projects = computed(() => {
+  if (!searchQuery.value) return allProjects;
+  
+  const query = searchQuery.value.toLowerCase();
+  return allProjects.filter(project => 
+    project.title.toLowerCase().includes(query) ||
+    project.description.toLowerCase().includes(query)
+  );
+});
 </script>
 
 <style scoped>
@@ -71,12 +98,51 @@ const projects = [
 
 .description {
   max-width: 700px;
-  margin: 0 auto 5rem;
+  margin: 0 auto 3rem;
   font-size: 1rem;
   line-height: 1.8;
   color: var(--text-color);
   opacity: 0.7;
   font-weight: 300;
+}
+
+.search-bar {
+  max-width: 500px;
+  margin: 0 auto 4rem;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--text-color);
+  opacity: 0.5;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1.5rem 1rem 3.5rem;
+  font-size: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 50px;
+  background: var(--card-background);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.5;
 }
 
 .projects-grid {

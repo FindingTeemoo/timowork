@@ -29,7 +29,6 @@ import ModelViewer from './ModelViewer.vue';
   margin-top: 80px;
   position: relative;
   overflow: hidden;
-  transform: translateY(-60px);
 }
 
 .featured-model > * {
