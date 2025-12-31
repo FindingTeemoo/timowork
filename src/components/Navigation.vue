@@ -139,31 +139,12 @@ onUnmounted(() => {
   padding: 0.8rem 0;
 }
 
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent-color);
-  transition: width var(--transition-speed) ease;
-}
-
 .nav-links a:hover {
   color: var(--text-color);
 }
 
-.nav-links a:hover::after {
-  width: 100%;
-}
-
 .nav-links a.active {
   color: var(--text-color);
-}
-
-.nav-links a.active::after {
-  width: 100%;
 }
 
 .nav-dropdown {
@@ -187,17 +168,6 @@ onUnmounted(() => {
   text-decoration: none;
   white-space: nowrap;
   position: relative;
-}
-
-.nav-link-text::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent-color);
-  transition: width var(--transition-speed) ease;
 }
 
 .nav-link-text:hover::after,

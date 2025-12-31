@@ -1,11 +1,5 @@
 <template>
   <div class="gallery">
-    <div class="gallery-header">
-      <h1 class="page-title">Digital Art Gallery</h1>
-      <p class="description">Explore a curated collection of digital artworks</p>
-    </div>
-
-    <!-- Gallery Grid -->
     <div class="gallery-grid">
       <div 
         v-for="(artwork, index) in artworks" 
@@ -104,29 +98,8 @@ onUnmounted(() => {
 .gallery {
   min-height: 100vh;
   background: var(--background-color);
-  padding-top: 80px;
+  padding-top: 100px;
   padding-bottom: 4rem;
-}
-
-.gallery-header {
-  text-align: center;
-  padding: 3rem 2rem 2rem;
-  color: var(--text-color);
-}
-
-.page-title {
-  font-family: var(--font-heading);
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  font-weight: 300;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-.description {
-  font-size: 1.1rem;
-  opacity: 0.7;
-  font-weight: 300;
 }
 
 .gallery-grid {

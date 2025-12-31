@@ -1,22 +1,19 @@
 <template>
   <div class="digital-models">
+    <div class="search-bar">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="Search projects..."
+        class="search-input"
+      />
+    </div>
+    
     <div class="content-wrapper">
-      <h1 class="page-title">Digital Models</h1>
-      <p class="description">Welcome to my gallery of unique digital models. Each model tells a unique story, inviting you to immerse yourself in the world of digital artistry. Browse through my collection of 3D projects.</p>
-      
-      <div class="search-bar">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        <input 
-          type="text" 
-          v-model="searchQuery" 
-          placeholder="Search projects..."
-          class="search-input"
-        />
-      </div>
-      
       <div class="projects-grid">
         <router-link 
           :to="project.link" 
@@ -46,19 +43,19 @@ const allProjects = [
   {
     title: 'KeyZ',
     description: 'Interactive 3D model of an ornate vintage key with detailed craftsmanship',
-    image: '/images/key/key_front.jpg',
+    image: '/images/key/KeyZ.jpg',
     link: '/digital-models/key-project'
   },
   {
     title: 'TufcaT',
     description: 'A detailed 3D model showcasing intricate design and craftsmanship',
-    image: '/images/tufcat/tufcat_main.png',
+    image: '/images/tufcat/Tufcat.jpg',
     link: '/digital-models/project-2'
   },
   {
     title: 'Dino',
     description: 'A detailed 3D dinosaur model',
-    image: '/images/dino/dino_placeholder.jpg',
+    image: '/images/dino/Dino.jpg',
     link: '/digital-models/dino-project'
   }
 ];
@@ -76,9 +73,18 @@ const projects = computed(() => {
 
 <style scoped>
 .digital-models {
-  padding: 140px 5rem 6rem;
+  padding: 100px 5rem 6rem;
   min-height: 100vh;
   background-color: var(--background-color);
+  position: relative;
+}
+
+.search-bar {
+  position: absolute;
+  top: 100px;
+  right: 5rem;
+  width: 250px;
+  z-index: 10;
 }
 
 .content-wrapper {
@@ -87,48 +93,23 @@ const projects = computed(() => {
   text-align: center;
 }
 
-.page-title {
-  font-family: var(--font-heading);
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  color: var(--text-color);
-  font-weight: 300;
-  letter-spacing: 2px;
-}
-
-.description {
-  max-width: 700px;
-  margin: 0 auto 3rem;
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text-color);
-  opacity: 0.7;
-  font-weight: 300;
-}
-
-.search-bar {
-  max-width: 500px;
-  margin: 0 auto 4rem;
-  position: relative;
-}
-
 .search-icon {
   position: absolute;
-  left: 1.5rem;
+  left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   color: var(--text-color);
   opacity: 0.5;
 }
 
 .search-input {
   width: 100%;
-  padding: 1rem 1.5rem 1rem 3.5rem;
-  font-size: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 50px;
+  padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
   background: var(--card-background);
   color: var(--text-color);
   transition: all 0.3s ease;
@@ -136,8 +117,8 @@ const projects = computed(() => {
 }
 
 .search-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  border-color: var(--border-color);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 .search-input::placeholder {
@@ -238,7 +219,7 @@ const projects = computed(() => {
 }
 
 .project-card:hover .project-title {
-  color: var(--accent-color);
+  color: var(--text-color);
 }
 
 .project-description {

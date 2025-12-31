@@ -8,6 +8,7 @@ import DinoProject from '../components/DinoProject.vue'
 import Figurines from '../components/Figurines.vue'
 import DripMonster from '../components/DripMonster.vue'
 import OnePieceMarine from '../components/OnePieceMarine.vue'
+import MonsterHunter from '../components/MonsterHunter.vue'
 import Gallery from '../components/Gallery.vue'
 import Contact from '../components/Contact.vue'
 
@@ -56,6 +57,11 @@ const routes = [
     path: '/figurines/one-piece-marine',
     name: 'OnePieceMarine',
     component: OnePieceMarine
+  },
+  {
+    path: '/figurines/monster-hunter',
+    name: 'MonsterHunter',
+    component: MonsterHunter
   },
   {
     path: '/gallery',
