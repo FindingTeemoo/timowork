@@ -169,3 +169,16 @@ body {
 .hover-glow:hover {
   animation: glow 2s infinite;
 }
+
+/* ========== Image Protection ========== */
+/* Disable drag on all images globally */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

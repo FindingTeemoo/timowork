@@ -7,7 +7,8 @@
         class="artwork-item"
         @click="openArtwork(index)"
       >
-        <img :src="artwork.image" :alt="artwork.title">
+        <img :src="artwork.image" :alt="artwork.title" @contextmenu.prevent @dragstart.prevent>
+        <div class="artwork-watermark"></div>
         <div class="artwork-overlay">
           <div class="artwork-info-preview">
             <h3>{{ artwork.title }}</h3>
@@ -26,7 +27,10 @@
           </svg>
         </button>
         <div class="lightbox-content" @click.stop>
-          <img :src="artworks[selectedArtwork].image" :alt="artworks[selectedArtwork].title">
+          <div class="lightbox-image-wrapper">
+            <img :src="artworks[selectedArtwork].image" :alt="artworks[selectedArtwork].title" @contextmenu.prevent @dragstart.prevent>
+            <div class="lightbox-watermark"></div>
+          </div>
           <div class="artwork-info">
             <h3>{{ artworks[selectedArtwork].title }}</h3>
             <p>{{ artworks[selectedArtwork].description }}</p>
@@ -176,6 +180,32 @@ onUnmounted(() => {
   letter-spacing: 1px;
 }
 
+.artwork-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.artwork-watermark::after {
+  content: 'Light Box';
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 6px;
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+}
+
 .artwork-card:hover .artwork-image img {
   transform: scale(1.05);
 }
@@ -230,6 +260,45 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+}
+
+.lightbox-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.lightbox-image-wrapper img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lightbox-watermark::after {
+  content: 'Light Box';
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  color: rgba(255, 255, 255, 0.1);
+  letter-spacing: 8px;
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
 }
 
 .lightbox-content img {

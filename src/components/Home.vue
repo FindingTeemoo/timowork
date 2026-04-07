@@ -22,7 +22,7 @@
            @mouseleave="isPaused = false"
            @click="isPaused = !isPaused"
            :class="{ 'paused': isPaused }">
-        <img src="/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif" alt="Hero Image">
+        <img src="/images/a744db_e0cf8e9d9a814280a591ab2b87d40774~mv2.avif" alt="Hero Image" @contextmenu.prevent @dragstart.prevent>
       </div>
     </div>
   </div>

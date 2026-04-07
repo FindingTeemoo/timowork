@@ -25,7 +25,8 @@
           :key="project.title"
         >
           <div class="project-image">
-            <img :src="project.image" :alt="project.title">
+            <img :src="project.image" :alt="project.title" @contextmenu.prevent @dragstart.prevent>
+            <div class="image-watermark"></div>
             <div class="project-overlay">
               <span class="view-project">View Project</span>
             </div>
@@ -191,6 +192,32 @@ const projects = computed(() => {
   object-fit: contain;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   filter: brightness(1);
+}
+
+.image-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.image-watermark::after {
+  content: 'Light Box';
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 6px;
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
 }
 
 .project-card:hover .project-image img {

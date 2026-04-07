@@ -1,7 +1,7 @@
 <template>
   <div class="one-piece-marine">
     <div class="featured-image">
-      <img src="/images/one-piece-marine/IMG_1545.jpg" alt="One Piece Marine Main" class="main-image">
+      <img src="/images/one-piece-marine/IMG_1545.jpg" alt="One Piece Marine Main" class="main-image" @contextmenu.prevent @dragstart.prevent>
     </div>
     <div class="rotating-text-container">
       <div class="rotating-text">
@@ -13,7 +13,8 @@
       <div class="models-grid">
         <div class="model-card" v-for="(model, index) in models" :key="model.title">
           <div class="model-image" @click="openLightbox(index)">
-            <img :src="model.image" :alt="model.title">
+            <img :src="model.image" :alt="model.title" @contextmenu.prevent @dragstart.prevent>
+            <div class="image-watermark"></div>
             <div class="image-overlay">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -48,7 +49,10 @@
           </svg>
         </button>
         <div class="lightbox-content" @click.stop>
-          <img :src="models[currentImageIndex].image" :alt="models[currentImageIndex].title">
+          <div class="lightbox-image-wrapper">
+            <img :src="models[currentImageIndex].image" :alt="models[currentImageIndex].title" @contextmenu.prevent @dragstart.prevent>
+            <div class="lightbox-watermark"></div>
+          </div>
           <p class="lightbox-caption">{{ models[currentImageIndex].title }}</p>
         </div>
       </div>
@@ -228,6 +232,32 @@ onUnmounted(() => {
   transition: transform 0.3s ease;
 }
 
+.image-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.image-watermark::after {
+  content: 'Light Box';
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 6px;
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+}
+
 .image-overlay {
   position: absolute;
   top: 0;
@@ -292,6 +322,45 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   cursor: default;
+}
+
+.lightbox-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.lightbox-image-wrapper img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.lightbox-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lightbox-watermark::after {
+  content: 'Light Box';
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  color: rgba(255, 255, 255, 0.1);
+  letter-spacing: 8px;
+  transform: rotate(-30deg);
+  white-space: nowrap;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
 }
 
 .lightbox-content img {
