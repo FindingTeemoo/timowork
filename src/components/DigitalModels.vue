@@ -1,15 +1,18 @@
 <template>
   <div class="digital-models">
-    <div class="search-bar">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.35-4.35"></path>
-      </svg>
+    <div class="search-bar" :class="{ expanded: isSearchExpanded }">
+      <button class="search-button" @click="isSearchExpanded = !isSearchExpanded" type="button">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
       <input 
         type="text" 
         v-model="searchQuery" 
         placeholder="Search projects..."
         class="search-input"
+        @focus="isSearchExpanded = true"
       />
     </div>
     
@@ -38,6 +41,7 @@
 import { ref, computed } from 'vue';
 
 const searchQuery = ref('');
+const isSearchExpanded = ref(false);
 
 const allProjects = [
   {
@@ -80,11 +84,36 @@ const projects = computed(() => {
 }
 
 .search-bar {
-  position: absolute;
-  top: 100px;
-  right: 5rem;
-  width: 250px;
-  z-index: 10;
+  position: fixed;
+  top: 90px;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  background: var(--card-background);
+  border-radius: 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.search-bar.expanded {
+  width: 280px;
+}
+
+.search-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
 }
 
 .content-wrapper {
@@ -94,31 +123,31 @@ const projects = computed(() => {
 }
 
 .search-icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   color: var(--text-color);
-  opacity: 0.5;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.search-button:hover .search-icon {
+  opacity: 1;
 }
 
 .search-input {
-  width: 100%;
-  padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+  flex: 1;
+  padding: 0.6rem 1rem 0.6rem 0.5rem;
   font-size: 0.875rem;
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  background: var(--card-background);
+  border: none;
+  background: transparent;
   color: var(--text-color);
-  transition: all 0.3s ease;
   outline: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.search-input:focus {
-  border-color: var(--border-color);
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+.search-bar.expanded .search-input {
+  opacity: 1;
 }
 
 .search-input::placeholder {
@@ -134,11 +163,9 @@ const projects = computed(() => {
 }
 
 .project-card {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--card-background);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -156,9 +183,6 @@ const projects = computed(() => {
   overflow: hidden;
   position: relative;
   background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .project-image img {
@@ -208,18 +232,25 @@ const projects = computed(() => {
 }
 
 .project-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   font-family: var(--font-heading);
   font-size: 2rem;
-  color: var(--text-color);
+  color: white;
   font-weight: 300;
   letter-spacing: 1px;
-  margin: 2rem 0 2rem;
-  padding: 0 2rem;
-  transition: color 0.3s ease;
+  margin: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
 }
 
 .project-card:hover .project-title {
-  color: var(--text-color);
+  opacity: 1;
 }
 
 .project-description {

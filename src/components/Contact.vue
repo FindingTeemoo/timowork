@@ -10,7 +10,7 @@
         <div class="contact-info">
           <div class="info-block">
             <h2>EMAIL</h2>
-            <a href="mailto:contact@example.com">contact@example.com</a>
+            <a href="mailto:timothycheung1998@gmail.com">timothycheung1998@gmail.com</a>
           </div>
 
           <div class="info-block">
@@ -22,8 +22,8 @@
 
           <div class="info-block">
             <h2>LOCATION</h2>
-            <p>New York, NY</p>
-            <p>United States</p>
+            <p>Manchester</p>
+            <p>United Kingdom</p>
           </div>
         </div>
 
